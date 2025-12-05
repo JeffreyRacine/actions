@@ -26,6 +26,22 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           tinytex: true
+
+      - name: Add TinyTeX bin path to GITHUB_PATH
+        run: |
+          # 1. Define the TinyTeX root directory (the install script default on Linux)
+          TINYTEX_ROOT="${HOME}/.TinyTeX"
+      
+          # 2. Find the bin directory (e.g., /home/runner/.TinyTeX/bin/x86_64-linux)
+          # The '*/' ensures we capture the correct architecture subdirectory.
+          TINYTEX_BIN_DIR=$(find "${TINYTEX_ROOT}/bin" -maxdepth 1 -type d -name "*-*" | head -n 1)
+      
+          # 3. Add the bin directory to the GITHUB_PATH environment variable
+          echo "TinyTeX Bin Directory found: ${TINYTEX_BIN_DIR}"
+          echo "${TINYTEX_BIN_DIR}" >> $GITHUB_PATH
+
+      - name: Verify TinyTeX is on PATH
+        run: pdflatex --version
          
       - name: Install R
         uses: r-lib/actions/setup-r@v2
