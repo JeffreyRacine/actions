@@ -41,8 +41,8 @@ knitr:
 ## Create two variables to control display of Google Scholar section, one 
 ## controlling the Markdown header, the other controlling the R code chunks
 params:
-  gseval: false
-header-gseval: false
+  gseval: true
+header-gseval: true
 ---
 
 ## \faHome Contact Information {.unnumbered}
