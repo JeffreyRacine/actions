@@ -78,11 +78,11 @@ jobs:
         shell: Rscript {0}
 
       - name: Check if GitHub (os is Linux), set Google Scholar to false
-        run: "sed -i 's/gseval: true/gseval: false/g' vitae.qmd"
+        run: "sed -i 's/gseval: true/gseval: false/g' index.qmd"
 
       - name: Render Quarto Document to PDF
-        # Replace 'vitae.qmd' with the actual name of your main Quarto file
-        run: quarto render vitae.qmd 
+        # Replace 'index.qmd' with the actual name of your main Quarto file
+        run: quarto render index.qmd 
 
       - name: Commit and Push Updated PDF
         run: |
@@ -92,7 +92,7 @@ jobs:
           
           # Add the generated PDF file. The path must match where Quarto outputs the file.
           # For a single document, it usually appears in the same directory.
-          git add vitae.pdf vitae.tex vitae.html vitae_files
+          git add index.pdf index.tex index.html index_files
           
           # Commit the changes. '|| true' or '|| echo' prevents the action from failing 
           # if there are no changes to the PDF (e.g., if the data didn't update).
