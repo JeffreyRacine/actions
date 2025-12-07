@@ -38,6 +38,11 @@ knitr:
     R.options:
       np.messages: false
       plot.par.mfrow: false
+## Create two variables to control display of Google Scholar section, one 
+## controlling the Markdown header, the other controlling the R code chunks
+params:
+  gseval: false
+header-gseval: false
 ---
 
 ## \faHome Contact Information {.unnumbered}
@@ -496,6 +501,60 @@ knitr:
 
     Amount: \$8,500\
     Date: 1985-1986
+    
+::: {.content-visible when-meta="header-gseval"}
+## \aiGoogleScholar Google Scholar Citation Summary {.unnumbered}
+:::
+
+<center>
+
+```{r, eval=params$gseval}
+#| label: foopander
+#| message: FALSE
+#| warning: FALSE
+#| echo: FALSE
+#| results: 'asis'
+## Re-use foo below to do counting etc. and can't use formatted
+## version for this, so make copy (foofoo) for formatting big.mark
+## comma in table then can re-use foo later for counts etc.
+foofoo <- foo <- gcite::gcite_user_info('TXeKxGsAAAAJ',verbose=FALSE,read_citations=FALSE)
+#foofoo$citation_indices$`All` <- format(foofoo$citation_indices$`All`,big.mark=",")
+#foofoo$citation_indices$`Since 2019` <- format(foofoo$citation_indices$`Since 2019`,big.mark=",")
+foofoo$citation_indices[[2]] <- format(foofoo$citation_indices[[2]],big.mark=",")
+foofoo$citation_indices[[3]] <- format(foofoo$citation_indices[[3]],big.mark=",")
+pander::panderOptions('table.alignment.default',c('left','right','right'))
+pander::pander(foofoo$citation_indices)
+```
+
+</center>
+
+```{r, eval=params$gseval}
+#| label: fooplot
+#| message: FALSE
+#| fig-asp: 0.4
+#| out-width: "75%"
+#| warning: FALSE
+#| echo: FALSE
+#| results: 'asis'
+require(ggplot2)
+require(gridExtra)
+require(scholar)
+#plot1 <- qplot(1)
+#plot2 <- qplot(1)
+## Adjust for discrepancy in total (field All[1] in call to gcite)
+adjust <- foo$citation_indices$All[1]-sum(foo$overall_citations$n_citations)
+plot1 <- ggplot(foo$overall_citations,aes(x=year,y=n_citations))+
+    geom_bar(stat='identity')+
+    theme_bw()+
+    xlab('Year')+
+    ylab('Citations/Year')
+plot2 <- ggplot(foo$overall_citations,aes(x=year,y=cumsum(n_citations)+adjust))+
+    geom_bar(stat='identity')+
+    theme_bw()+
+    xlab('Year')+
+    ylab('Cumulative Citations')
+grid.arrange(plot1, plot2, ncol=2)    
+```
 
 ## \faBook Books {.unnumbered}
 
