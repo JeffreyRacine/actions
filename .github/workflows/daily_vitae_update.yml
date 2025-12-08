@@ -109,6 +109,10 @@ jobs:
       environment:
         name: github-pages
         url: ${{ steps.deployment.outputs.page_url }}
+
+      # Set permissions to allow the action to write/commit files
+      permissions:
+        contents: write
         
       runs-on: ubuntu-latest
       
