@@ -104,7 +104,9 @@ jobs:
   deploy-pages:
       # 1. Set permissions to allow the action to write/commit files
       permissions:
-        contents: write
+        contents: read # Read permission for checking out the code
+        pages: write   # Permission to deploy to GitHub Pages
+        id-token: write # Needed for secure deployment/OIDC
       runs-on: ubuntu-latest
       # 2. This job must only run after the build job succeeds
       needs: build-pdf 
