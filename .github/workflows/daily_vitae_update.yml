@@ -81,8 +81,10 @@ jobs:
         run: "sed -i 's/gseval: true/gseval: false/g' index.qmd"
 
       - name: Render Quarto Document to PDF
-        # Replace 'index.qmd' with the actual name of your main Quarto file
-        run: quarto render index.qmd 
+        # Post-render copy the pdf to cv.pdf
+        run: |
+          quarto render index.qmd 
+          cp index.pdf cv.pdf
 
       - name: Commit and Push Updated PDF
         run: |
@@ -92,7 +94,7 @@ jobs:
           
           # Add the generated PDF file. The path must match where Quarto outputs the file.
           # For a single document, it usually appears in the same directory.
-          git add index.pdf index.tex index.html index_files
+          git add index.pdf index.tex index.html index_files cv.pdf
           
           # Commit the changes. '|| true' or '|| echo' prevents the action from failing 
           # if there are no changes to the PDF (e.g., if the data didn't update).
