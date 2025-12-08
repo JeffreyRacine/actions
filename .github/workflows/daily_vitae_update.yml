@@ -102,22 +102,18 @@ jobs:
           git push
           
   deploy-pages:
-      # 1. This job must only run after the build job succeeds
+      # 1. Set permissions to allow the action to write/commit files
+      permissions:
+        contents: write
+      runs-on: ubuntu-latest
+      # 2. This job must only run after the build job succeeds
       needs: build-pdf 
-      
-      # 2. Configure the GitHub Pages environment
+      # 3. Configure the GitHub Pages environment
       environment:
         name: github-pages
         url: ${{ steps.deployment.outputs.page_url }}
-
-      # Set permissions to allow the action to write/commit files
-      permissions:
-        contents: write
-        
-      runs-on: ubuntu-latest
-      
       steps:
         - name: Deploy to GitHub Pages
           id: deployment
-          # 3. Use the official deployment action
+          # 4. Use the official deployment action
           uses: actions/deploy-pages@v4
